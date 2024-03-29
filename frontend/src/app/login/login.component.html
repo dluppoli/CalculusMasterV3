@@ -1,0 +1,15 @@
+<div class="form-body text-center">
+    <div class="form-signin w-100 m-auto">
+        <form [formGroup]="form">
+            <div class="form-floating">                    
+                <input id="username" name="username" type="text" autocomplete="username" formControlName="username" autofocus class="form-control" placeholder="username">
+                <label for="username">Username</label>
+            </div>
+            <section class="form-floating">
+                <input id="current-password" name="password" type="password" autocomplete="current-password" formControlName="password" class="form-control" placeholder="Password">
+                <label for="current-password">Password</label>
+            </section>
+            <button class="w-100 btn btn-success" (click)="submit()">Accedi</button>
+        </form>
+    </div>
+</div>
