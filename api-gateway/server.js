@@ -4,12 +4,20 @@ import http from 'http-proxy-middleware';
 import jwt from 'jsonwebtoken';
 import fs from 'fs';
 import cors from 'cors';
+import { Storage } from '@google-cloud/storage'
 
 dotenv.config();
 const app = express();
 app.use(cors());
 
-const publicKey = fs.readFileSync('../public.key', 'utf8');
+let cloudStorageService;
+if( process.env.BUCKET_AUT_KEY && fs.existsSync(process.env.BUCKET_AUT_KEY))
+  cloudStorageService= new Storage({keyFilename:process.env.BUCKET_AUT_KEY})
+else
+  cloudStorageService= new Storage();
+
+const pubfile = await cloudStorageService.bucket(process.env.KEYS_BUCKET).file(process.env.PUB_KEY_FILE).download();
+const publicKey = pubfile.toString('utf8')
 
 function isAuthenticated(req, res, next) {
     if(!req.headers['authorization']) return res.status(401).json({ error: 'Token Missing' });

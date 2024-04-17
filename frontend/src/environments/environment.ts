@@ -1,3 +1,3 @@
 export const environment = {
-    backendUrl:'http://localhost:4000'
+    backendUrl:'API_URL_LINK_HERE'
 };

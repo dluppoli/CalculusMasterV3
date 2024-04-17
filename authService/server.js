@@ -5,13 +5,22 @@ import bodyParser from 'body-parser'
 import jwt from 'jsonwebtoken'
 import mysql from 'mysql2';
 import crypto from 'crypto';
+import { Storage } from '@google-cloud/storage'
 
 dotenv.config();
 var app = express();
 app.use(bodyParser.json());
 
-const privateKey = fs.readFileSync('../private.key', 'utf8');
-const publicKey = fs.readFileSync('../public.key', 'utf8');
+let cloudStorageService;
+if( process.env.BUCKET_AUT_KEY && fs.existsSync(process.env.BUCKET_AUT_KEY))
+  cloudStorageService= new Storage({keyFilename:process.env.BUCKET_AUT_KEY});
+else
+  cloudStorageService= new Storage();
+
+const pubfile = await cloudStorageService.bucket(process.env.KEYS_BUCKET).file(process.env.PUB_KEY_FILE).download();
+const publicKey = pubfile.toString('utf8')
+const prvfile = await cloudStorageService.bucket(process.env.KEYS_BUCKET).file(process.env.PRV_KEY_FILE).download();
+const privateKey = prvfile.toString('utf8')
 
 /*Auth Functions*/
 function isAuthenticated(req, res, next) {
@@ -40,7 +49,7 @@ app.post('/login', (req, res) => {
      });
      connection.connect();
   
-     connection.query('SELECT * FROM Users WHERE username = ?',username,function (error, results, fields) {
+     connection.query('SELECT * FROM Users WHERE Username = ?;',username,function (error, results, fields) {
         if(error) throw error;
         if(results.length==0) return res.status(401).json({ error: 'Incorrect username or password' });
         
