@@ -25,14 +25,6 @@ resource "google_cloud_run_v2_service" "default" {
       connector = var.vpc_access_connector
       egress = "ALL_TRAFFIC"
     }
-
-    /*dynamic "vpc_access" {
-      for_each = var.vpc_access_connector
-      content {
-        connector = "projects/unibocloud2024-420113/locations/us-central1/connectors/vpc-con"
-        egress = "ALL_TRAFFIC"
-      }
-    }*/
   }
 }
 
