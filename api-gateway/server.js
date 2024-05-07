@@ -10,14 +10,22 @@ dotenv.config();
 const app = express();
 app.use(cors());
 
-let cloudStorageService;
-if( process.env.BUCKET_AUT_KEY && fs.existsSync(process.env.BUCKET_AUT_KEY))
-  cloudStorageService= new Storage({keyFilename:process.env.BUCKET_AUT_KEY})
-else
-  cloudStorageService= new Storage();
+let publicKey = "";
+if( process.env.KEYS_BUCKET)
+{
+  let cloudStorageService;
+  if( process.env.BUCKET_AUT_KEY && fs.existsSync(process.env.BUCKET_AUT_KEY))
+    cloudStorageService= new Storage({keyFilename:process.env.BUCKET_AUT_KEY})
+  else
+    cloudStorageService= new Storage();
 
-const pubfile = await cloudStorageService.bucket(process.env.KEYS_BUCKET).file(process.env.PUB_KEY_FILE).download();
-const publicKey = pubfile.toString('utf8')
+  const pubfile = await cloudStorageService.bucket(process.env.KEYS_BUCKET).file(process.env.PUB_KEY_FILE).download();
+  publicKey = pubfile.toString('utf8')
+}
+else
+{
+  publicKey = fs.readFileSync(process.env.PUB_KEY_FILE, 'utf8');
+}
 
 function isAuthenticated(req, res, next) {
     if(!req.headers['authorization']) return res.status(401).json({ error: 'Token Missing' });
