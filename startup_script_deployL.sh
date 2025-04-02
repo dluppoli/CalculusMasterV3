@@ -36,6 +36,9 @@ PORT=4000
 AUTH_API = "http://localhost:4010"
 ERATOSTENE_API = "http://localhost:4020"
 PIGRECO_API = "http://localhost:4030"
+
+#Keys
+PUB_KEY_FILE = "../public.key"
 EOF
 npm install
 npm start&
@@ -51,6 +54,10 @@ DB_HOST = $DB_IP
 DB_USER = calculusmaster
 DB_PASSWORD = pigreco
 DB = CalculusMaster
+
+#Keys
+PUB_KEY_FILE = "../public.key"
+PRV_KEY_FILE = "../private.key"
 EOF
 npm install
 npm start&

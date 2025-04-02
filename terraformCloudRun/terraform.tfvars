@@ -1,4 +1,4 @@
-project = "unibocloud2024-420113"
+project = "unibocloud2025-420113"
 db_root_password = "superstrongpassword"
 startupscripturl_mysql = "gs://calculusmaster22/startup_script_mysql.sh"
 
